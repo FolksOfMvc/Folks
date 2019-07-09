@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using hii.Models;
+using hii.Dal;
+
+namespace hii.Controllers
+{
+    public class CustomerBinder : IModelBinder
+    {
+        public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        {
+            HttpContextBase objContext = controllerContext.HttpContext;
+            string custCode = objContext.Request.Form["txtCustomerCode"];
+            string custName = objContext.Request.Form["txtCustomerName"];
+            Customer obj = new Customer()
+            {
+                CustomerCode = custCode,
+                CustomerName = custName
+            };
+            return obj;
+        }
+    }
+    public class CustomerController : Controller
+    {
+        // GET: Customer
+        public ActionResult load()
+        {
+            Customer obj = new Customer
+            {
+                CustomerCode = "1001",
+                CustomerName = "shirisha"
+            };
+            return View("Customer",obj);
+        }
+        public ActionResult Enter()
+        {
+            return View("EnterCustomer",new Customer());
+        }
+        public ActionResult submit(Customer obj)
+        {
+            if(ModelState.IsValid)
+            {
+                CustomerDal Dal = new CustomerDal();
+                Dal.Customers.Add(obj);
+                Dal.SaveChanges(); 
+                return View("Customer", obj);
+            }
+            else
+            {
+                return View("EnterCustomer",obj);
+            }
+            
+        }
+    } 
+    
+}
