@@ -1,0 +1,37 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using hii.Models;
+
+namespace hii.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        // GET: Employee
+        public ActionResult Show()
+        {
+            Employee e = GetEmployee();
+            User CurrentUser = GetCurrentUser();
+
+            EmployeeVM evm = new EmployeeVM(e, CurrentUser);
+            return View(evm);
+        }
+        private User GetCurrentUser()
+        {
+            User u = new User();
+            u.UserName = "Questpond Subscribers";
+            return u;
+        }
+        private Employee GetEmployee()
+        {
+            Employee e = new Employee();
+            e.EmployeeName = "shirisha";
+            e.Address = "Hyderabad";
+            e.DOB = 18;
+            e.Salary = 25000;
+            return e;
+        }
+    }
+}
